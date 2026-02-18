@@ -1,0 +1,1028 @@
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOX PRO STUDIO — A Máquina de Produção de Canais Dark</title>
+<link rel="icon" type="image/png" href="vox-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#FFD700;--orange:#FF8C00;--cyan:#00D4FF;
+  --dark:#020204;--card:#0d0d12;--card2:#111118;
+  --border:rgba(255,215,0,0.12);--border-cyan:rgba(0,212,255,0.15);
+  --text:#fff;--muted:rgba(255,255,255,0.45);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--dark);font-family:'Syne',sans-serif;color:var(--text);overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#FFD700,#FF8C00);border-radius:10px;}
+
+/* BACKGROUND */
+.grid-bg{position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(255,215,0,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,0.022) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;}
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.orb1{width:700px;height:700px;background:rgba(255,140,0,0.06);top:-300px;left:-200px;animation:orbFloat 12s ease-in-out infinite;}
+.orb2{width:600px;height:600px;background:rgba(0,212,255,0.04);bottom:-200px;right:-150px;animation:orbFloat 15s ease-in-out infinite reverse;}
+.orb3{width:400px;height:400px;background:rgba(255,215,0,0.035);top:50%;left:50%;transform:translate(-50%,-50%);animation:orbFloat 18s ease-in-out infinite;}
+@keyframes orbFloat{0%,100%{transform:translate(0,0);}50%{transform:translate(25px,-20px);}}
+
+/* ============ NOISE OVERLAY ============ */
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  opacity:0.4;
+}
+
+/* ============ WRAPPER ============ */
+.wrap{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 24px;}
+
+/* ============ TOPNAV ============ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:18px 0;
+  background:rgba(2,2,4,0.85);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,215,0,0.07);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 24px;}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-brand-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#FFD700,#FF8C00);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.nav-brand-text{font-size:15px;font-weight:800;letter-spacing:3px;background:linear-gradient(135deg,#FFD700,#FF8C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-cta{
+  padding:10px 24px;border-radius:8px;
+  background:linear-gradient(135deg,#FFD700,#FF8C00);
+  color:#000;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
+  text-decoration:none;transition:all 0.3s;border:none;cursor:pointer;
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,215,0,0.35);}
+
+/* ============ HERO ============ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:120px 0 80px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);
+  border-radius:100px;padding:8px 20px;font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;color:var(--gold);
+  margin-bottom:32px;animation:fadeUp 0.6s ease both;
+}
+.hero-badge span{width:6px;height:6px;border-radius:50%;background:#00ff64;box-shadow:0 0 8px #00ff64;animation:dotPulse 2s infinite;}
+@keyframes dotPulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(60px,10vw,130px);
+  line-height:0.9;letter-spacing:2px;
+  background:linear-gradient(135deg,#FFD700 0%,#FF8C00 50%,#FFD700 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 5s linear infinite, fadeUp 0.7s ease 0.1s both;
+}
+@keyframes shimmer{0%{background-position:0% 50%;}100%{background-position:200% 50%;}}
+
+.hero-sub{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(20px,4vw,42px);
+  color:rgba(255,255,255,0.9);letter-spacing:4px;
+  margin-top:-6px;margin-bottom:20px;
+  animation:fadeUp 0.7s ease 0.2s both;
+}
+.hero-desc{
+  max-width:680px;margin:0 auto;
+  font-size:17px;color:rgba(255,255,255,0.6);line-height:1.7;
+  font-family:'Space Mono',monospace;
+  animation:fadeUp 0.7s ease 0.3s both;
+}
+.hero-desc strong{color:var(--cyan);}
+
+/* HERO VIDEO MOCK */
+.hero-mockup{
+  margin:50px auto 0;max-width:860px;width:100%;
+  position:relative;animation:fadeUp 0.8s ease 0.4s both;
+}
+.mockup-frame{
+  background:rgba(13,13,18,0.95);border:1px solid rgba(255,215,0,0.18);
+  border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 120px rgba(0,0,0,0.7),0 0 0 1px rgba(255,215,0,0.05),inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.mockup-bar{
+  padding:14px 20px;background:rgba(8,8,12,0.9);border-bottom:1px solid rgba(255,215,0,0.08);
+  display:flex;align-items:center;gap:8px;
+}
+.mockup-dot{width:10px;height:10px;border-radius:50%;}
+.mockup-dot:nth-child(1){background:#ff5f57;}
+.mockup-dot:nth-child(2){background:#ffbd2e;}
+.mockup-dot:nth-child(3){background:#28c940;}
+.mockup-title{margin-left:12px;font-size:12px;font-family:'Space Mono',monospace;color:var(--muted);letter-spacing:1px;}
+.mockup-body{
+  padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:24px;
+  min-height:320px;
+}
+.mock-card{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,215,0,0.1);
+  border-radius:14px;padding:20px;
+}
+.mock-card-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.mock-module{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:rgba(255,215,0,0.07);border:1px solid rgba(255,215,0,0.15);
+  border-radius:10px;margin-bottom:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.3s;
+}
+.mock-module.active{background:rgba(255,215,0,0.15);border-color:rgba(255,215,0,0.4);color:var(--gold);}
+.mock-module:hover{background:rgba(255,215,0,0.12);}
+.mock-progress{margin-top:16px;}
+.mock-progress-label{font-size:11px;color:var(--muted);margin-bottom:6px;font-family:'Space Mono',monospace;}
+.mock-bar-wrap{background:rgba(255,255,255,0.06);border-radius:100px;height:6px;overflow:hidden;}
+.mock-bar-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#FFD700,#FF8C00);animation:fillBar 3s ease-in-out infinite;}
+@keyframes fillBar{0%{width:10%;}60%{width:87%;}100%{width:10%;}}
+.mock-output{display:flex;flex-direction:column;gap:8px;}
+.mock-file{
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.12);
+  border-radius:8px;padding:10px 14px;font-size:12px;font-family:'Space Mono',monospace;
+}
+.mock-file-name{color:var(--cyan);}
+.mock-badge{
+  padding:2px 10px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;
+  background:rgba(0,255,100,0.1);color:#00ff64;border:1px solid rgba(0,255,100,0.2);
+}
+
+/* ============ SECTION SPACER ============ */
+section{padding:100px 0;}
+.section-label{
+  font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-label::before{content:'';width:30px;height:2px;background:var(--gold);}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(40px,6vw,72px);
+  letter-spacing:2px;line-height:1;
+  margin-bottom:20px;
+}
+.section-desc{color:var(--muted);font-size:16px;line-height:1.7;max-width:600px;font-family:'Space Mono',monospace;}
+
+/* ============ DIVIDER ============ */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,0.15),transparent);margin:0;}
+
+/* ============ FEATURES ============ */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+@media(max-width:768px){.features-grid{grid-template-columns:1fr;}
+.mockup-body{grid-template-columns:1fr;}.hero-title{font-size:60px;}.topbar-mock{display:none;}}
+.feature-card{
+  background:rgba(13,13,18,0.8);border:1px solid var(--border);
+  border-radius:20px;padding:32px;
+  transition:all 0.4s;position:relative;overflow:hidden;
+}
+.feature-card::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  background:radial-gradient(circle at 50% 0%,rgba(255,215,0,0.08),transparent 70%);
+  transition:opacity 0.4s;
+}
+.feature-card:hover{border-color:rgba(255,215,0,0.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.4);}
+.feature-card:hover::before{opacity:1;}
+.feat-icon{font-size:36px;margin-bottom:20px;display:block;}
+.feat-title{font-size:18px;font-weight:700;margin-bottom:10px;letter-spacing:0.5px;}
+.feat-desc{color:var(--muted);font-size:13px;line-height:1.7;font-family:'Space Mono',monospace;}
+
+/* ============ MODULES ============ */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin-top:60px;}
+.module-card{
+  background:rgba(13,13,18,0.8);border:1px solid var(--border);
+  border-radius:20px;padding:28px;
+  display:flex;align-items:flex-start;gap:18px;
+  transition:all 0.3s;
+}
+.module-card:hover{border-color:rgba(255,215,0,0.25);transform:translateY(-3px);}
+.module-emoji{font-size:40px;flex-shrink:0;line-height:1;}
+.module-info h4{font-size:16px;font-weight:700;margin-bottom:6px;}
+.module-info p{color:var(--muted);font-size:13px;line-height:1.6;font-family:'Space Mono',monospace;}
+.module-tag{
+  display:inline-block;margin-top:10px;padding:3px 12px;border-radius:100px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.2);color:var(--gold);
+}
+
+/* ============ HOW IT WORKS ============ */
+.steps{display:flex;flex-direction:column;gap:20px;margin-top:60px;max-width:800px;}
+.step{
+  display:flex;align-items:flex-start;gap:24px;
+  background:rgba(13,13,18,0.8);border:1px solid var(--border);
+  border-radius:20px;padding:28px;position:relative;
+}
+.step-num{
+  font-family:'Bebas Neue',sans-serif;font-size:52px;
+  line-height:1;color:rgba(255,215,0,0.15);flex-shrink:0;
+  min-width:60px;text-align:center;
+}
+.step-content h4{font-size:17px;font-weight:700;margin-bottom:8px;}
+.step-content p{color:var(--muted);font-size:13px;line-height:1.7;font-family:'Space Mono',monospace;}
+.step-content a{color:var(--cyan);text-decoration:none;}
+.step-content a:hover{text-decoration:underline;}
+.step-badge{
+  display:inline-block;margin-top:10px;padding:3px 12px;border-radius:100px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.2);color:var(--cyan);
+}
+.step-badge.free{background:rgba(0,255,100,0.1);border-color:rgba(0,255,100,0.2);color:#00ff64;}
+
+/* ============ MANUAL / ACCORDION ============ */
+.manual-wrap{margin-top:60px;}
+.manual-intro{
+  background:rgba(13,13,18,0.9);border:1px solid rgba(255,215,0,0.18);
+  border-radius:20px;padding:32px;margin-bottom:20px;
+}
+.manual-intro h3{font-size:20px;font-weight:800;margin-bottom:12px;letter-spacing:1px;}
+.manual-intro p{color:var(--muted);font-size:14px;font-family:'Space Mono',monospace;line-height:1.7;}
+.accord{border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px;}
+.accord-head{
+  width:100%;background:rgba(13,13,18,0.9);border:none;
+  padding:22px 28px;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;
+  text-align:left;transition:background 0.3s;
+}
+.accord-head:hover{background:rgba(255,215,0,0.05);}
+.accord-head h4{font-size:15px;font-weight:700;letter-spacing:0.5px;color:var(--text);display:flex;align-items:center;gap:12px;}
+.accord-head h4 span{font-size:20px;}
+.accord-arrow{color:var(--gold);font-size:18px;transition:transform 0.3s;flex-shrink:0;}
+.accord-body{
+  background:rgba(8,8,12,0.8);padding:0 28px;
+  max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s;
+}
+.accord-body.open{max-height:800px;padding:24px 28px;}
+.accord-body p,.accord-body li{color:var(--muted);font-size:13px;line-height:1.8;font-family:'Space Mono',monospace;}
+.accord-body ol,.accord-body ul{padding-left:20px;}
+.accord-body li{margin-bottom:8px;}
+.accord-body strong{color:rgba(255,255,255,0.85);}
+.accord-body a{color:var(--cyan);text-decoration:none;}
+.accord-body a:hover{text-decoration:underline;}
+.accord-body .warn-box{
+  margin-top:16px;padding:16px 20px;
+  background:rgba(255,165,0,0.07);border:1px solid rgba(255,165,0,0.2);
+  border-radius:12px;color:rgba(255,200,100,0.85);
+}
+.accord-body .tip-box{
+  margin-top:16px;padding:16px 20px;
+  background:rgba(0,255,100,0.06);border:1px solid rgba(0,255,100,0.15);
+  border-radius:12px;color:rgba(100,255,160,0.85);
+}
+
+/* ============ STATS ============ */
+.stats-row{display:flex;gap:24px;margin-top:60px;flex-wrap:wrap;}
+.stat-card{
+  flex:1;min-width:180px;
+  background:rgba(13,13,18,0.8);border:1px solid var(--border);
+  border-radius:20px;padding:28px 24px;text-align:center;
+}
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;
+  background:linear-gradient(135deg,#FFD700,#FF8C00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-label{color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;margin-top:6px;letter-spacing:1px;}
+
+/* ============ TESTIMONIALS ============ */
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:60px;}
+@media(max-width:900px){.testimonials-grid{grid-template-columns:1fr;}}
+.testi-card{
+  background:rgba(13,13,18,0.8);border:1px solid var(--border);
+  border-radius:20px;padding:28px;
+}
+.testi-stars{color:var(--gold);font-size:16px;margin-bottom:16px;letter-spacing:2px;}
+.testi-text{color:rgba(255,255,255,0.7);font-size:13px;line-height:1.8;font-family:'Space Mono',monospace;margin-bottom:20px;font-style:italic;}
+.testi-author{display:flex;align-items:center;gap:12px;}
+.testi-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FFD700,#FF8C00);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#000;flex-shrink:0;}
+.testi-name{font-size:13px;font-weight:700;}
+.testi-role{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;}
+
+/* ============ PRICING ============ */
+.pricing-wrapper{
+  max-width:640px;margin:60px auto 0;
+  position:relative;
+}
+.pricing-card{
+  background:rgba(13,13,18,0.95);
+  border:2px solid rgba(255,215,0,0.35);
+  border-radius:28px;padding:48px 40px;text-align:center;
+  box-shadow:0 0 80px rgba(255,215,0,0.08),inset 0 1px 0 rgba(255,255,255,0.05);
+  position:relative;overflow:hidden;
+}
+.pricing-card::before{
+  content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:400px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,215,0,0.06),transparent 70%);
+  pointer-events:none;
+}
+.promo-ribbon{
+  position:absolute;top:20px;right:-30px;
+  background:linear-gradient(135deg,#ff4444,#cc0000);
+  color:#fff;font-size:11px;font-weight:800;letter-spacing:1.5px;
+  padding:8px 48px;transform:rotate(45deg);
+  transform-origin:center;box-shadow:0 4px 20px rgba(255,0,0,0.4);
+}
+.pricing-label{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.25);
+  border-radius:100px;padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:2px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:28px;
+}
+.pricing-label span{width:6px;height:6px;border-radius:50%;background:#ff4444;box-shadow:0 0 8px #ff4444;animation:dotPulse 1.5s infinite;}
+.pricing-original{
+  font-size:20px;color:rgba(255,255,255,0.3);text-decoration:line-through;
+  font-family:'Space Mono',monospace;margin-bottom:8px;
+}
+.pricing-promo{
+  font-family:'Bebas Neue',sans-serif;font-size:90px;line-height:1;
+  background:linear-gradient(135deg,#FFD700,#FF8C00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:2px;
+}
+.pricing-period{
+  color:rgba(255,255,255,0.5);font-size:15px;font-family:'Space Mono',monospace;
+  margin-bottom:6px;
+}
+.pricing-urgency{
+  display:inline-block;background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.25);
+  border-radius:8px;padding:8px 18px;margin:20px 0;
+  color:#ff8888;font-size:13px;font-weight:700;letter-spacing:1px;
+  font-family:'Space Mono',monospace;
+}
+.pricing-urgency strong{color:#ff4444;}
+
+.pricing-perks{text-align:left;margin:28px 0;display:flex;flex-direction:column;gap:12px;}
+.perk{display:flex;align-items:flex-start;gap:12px;font-size:14px;font-family:'Space Mono',monospace;}
+.perk-icon{color:#00ff64;font-size:16px;flex-shrink:0;margin-top:1px;}
+.perk span{color:rgba(255,255,255,0.75);line-height:1.5;}
+
+.btn-buy{
+  display:block;width:100%;padding:20px;border:none;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,#FFD700,#FF8C00);
+  color:#000;font-family:'Bebas Neue',sans-serif;font-size:26px;
+  letter-spacing:3px;text-transform:uppercase;
+  transition:all 0.3s;text-decoration:none;
+  position:relative;overflow:hidden;margin-top:8px;
+}
+.btn-buy::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+  transform:translateX(-100%);transition:transform 0.6s;
+}
+.btn-buy:hover::after{transform:translateX(100%);}
+.btn-buy:hover{transform:translateY(-3px);box-shadow:0 16px 60px rgba(255,215,0,0.45);}
+.btn-buy-sub{color:rgba(0,0,0,0.6);font-size:11px;font-family:'Syne',monospace;letter-spacing:1px;text-transform:uppercase;}
+
+.pricing-guarantee{
+  margin-top:24px;display:flex;align-items:center;gap:12px;justify-content:center;
+  color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;
+}
+.guarantee-icon{font-size:24px;}
+.pricing-note{
+  margin-top:16px;font-size:11px;color:rgba(255,255,255,0.2);
+  font-family:'Space Mono',monospace;
+}
+
+/* ============ FAQ ============ */
+.faq-wrap{max-width:760px;margin:60px auto 0;}
+
+/* ============ FOOTER ============ */
+footer{
+  border-top:1px solid var(--border);padding:40px 0;
+  text-align:center;color:rgba(255,255,255,0.15);
+  font-size:12px;font-family:'Space Mono',monospace;
+}
+footer a{color:rgba(255,255,255,0.25);text-decoration:none;}
+footer a:hover{color:var(--gold);}
+
+/* ============ FLOATING CTA ============ */
+.floating-cta{
+  position:fixed;bottom:28px;right:28px;z-index:200;
+  animation:fadeUp 1s ease 1s both;
+}
+.floating-cta a{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 24px;border-radius:100px;
+  background:linear-gradient(135deg,#FFD700,#FF8C00);
+  color:#000;font-weight:800;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;
+  text-decoration:none;transition:all 0.3s;
+  box-shadow:0 8px 40px rgba(255,215,0,0.4);
+}
+.floating-cta a:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 50px rgba(255,215,0,0.55);}
+
+/* ============ SCROLL REVEAL ============ */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* COUNTDOWN */
+.countdown{
+  display:flex;gap:16px;justify-content:center;margin:20px 0;
+}
+.cd-block{
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,215,0,0.15);
+  border-radius:10px;padding:10px 16px;text-align:center;min-width:64px;
+}
+.cd-num{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;color:var(--gold);}
+.cd-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'Space Mono',monospace;}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <img src="vox-icon.png" style="width:40px;height:40px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);object-fit:cover;" />
+      <span class="nav-brand-text">VOX PRO STUDIO</span>
+    </div>
+    <a href="#pricing" class="nav-cta">Garantir Acesso →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div style="margin-bottom:32px;animation:fadeUp 0.5s ease both;">
+      <img src="vox-icon.png" style="width:120px;height:120px;border-radius:24px;border:2px solid rgba(0,212,255,0.35);box-shadow:0 0 80px rgba(0,212,255,0.25),0 0 30px rgba(255,215,0,0.1);animation:logoPulse 3s ease-in-out infinite;">
+    </div>
+    <div class="hero-badge">
+      <span></span>
+      Oferta especial — primeiras 100 chaves
+    </div>
+    <h1 class="hero-title">VOX PRO<br>STUDIO</h1>
+    <p class="hero-sub">A Máquina de Produção de Canais Dark</p>
+    <p class="hero-desc">
+      A mesma engenharia de prompts usada pelas maiores agências de conteúdo viral do mundo.<br>
+      <strong>Automatize. Escale. Lucre.</strong>
+    </p>
+
+    <!-- APP MOCKUP -->
+    <div class="hero-mockup">
+      <div class="mockup-frame">
+        <div class="mockup-bar">
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+          <div class="mockup-dot"></div>
+          <span class="mockup-title">VOX PRO STUDIO — Painel de Produção</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mock-card">
+            <div class="mock-card-label">Módulo de Produção</div>
+            <div class="mock-module active">💀 Skeleton Shorts</div>
+            <div class="mock-module">🔨 Renovation Timelapse</div>
+            <div class="mock-module">🚗 Car Restoration</div>
+            <div class="mock-module">🛠️ Mini Ferramentas</div>
+            <div class="mock-progress">
+              <div class="mock-progress-label">Gerando vídeo 3/5... ██████████░░</div>
+              <div class="mock-bar-wrap"><div class="mock-bar-fill"></div></div>
+            </div>
+          </div>
+          <div class="mock-card">
+            <div class="mock-card-label">Arquivos Gerados</div>
+            <div class="mock-output">
+              <div class="mock-file"><span class="mock-file-name">1_roteiro.txt</span><span class="mock-badge">PRONTO</span></div>
+              <div class="mock-file"><span class="mock-file-name">2_prompts_imagem.txt</span><span class="mock-badge">PRONTO</span></div>
+              <div class="mock-file"><span class="mock-file-name">3_prompts_video.txt</span><span class="mock-badge">PRONTO</span></div>
+              <div class="mock-file" style="opacity:0.4;"><span class="mock-file-name">Gerando...</span><span class="mock-badge" style="background:rgba(255,165,0,0.1);color:#ffa500;border-color:rgba(255,165,0,0.2);">IA</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STATS -->
+<section style="padding:70px 0;">
+  <div class="wrap">
+    <div class="stats-row reveal">
+      <div class="stat-card">
+        <div class="stat-num">5</div>
+        <div class="stat-label">Módulos Dark ativos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">Vídeos/hora gerados</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Gratuito via Gemini AI</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Canais alimentados/semana</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Por que o VOX PRO?</div>
+      <h2 class="section-title">O QUE VOCÊ<br>RECEBE</h2>
+      <p class="section-desc">Tudo que você precisa para dominar o YouTube de conteúdo viral — sem câmera, sem aparecer, sem experiência.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feat-icon">🧠</span>
+        <h3 class="feat-title">IA Totalmente Autônoma</h3>
+        <p class="feat-desc">Modo AUTOMÁTICO gera temas virais, pesquisa o mercado e inventa os vídeos por você. Nenhuma ideia necessária.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feat-icon">⚡</span>
+        <h3 class="feat-title">Esteira de Produção Completa</h3>
+        <p class="feat-desc">Roteiro, prompts de imagem (Midjourney), prompts de vídeo (Luma/Runway) e SEO do YouTube — tudo gerado automaticamente.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feat-icon">🛡️</span>
+        <h3 class="feat-title">Anti-Repetição Inteligente</h3>
+        <p class="feat-desc">O sistema memoriza seus temas anteriores e nunca repete conteúdo. Seus canais sempre com assuntos frescos e únicos.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feat-icon">📁</span>
+        <h3 class="feat-title">Organização Automática</h3>
+        <p class="feat-desc">Todos os arquivos salvos em pastas numeradas e organizadas automaticamente. Produção pronta para upload imediato.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feat-icon">🔓</span>
+        <h3 class="feat-title">Combustível 100% Grátis</h3>
+        <p class="feat-desc">Roda com Google Gemini 2.5 Flash gratuitamente. Chaves API ilimitadas — pode trocar quando quiser.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feat-icon">💀</span>
+        <h3 class="feat-title">5 Nichos Dark Dominados</h3>
+        <p class="feat-desc">Skeleton, Renovation, Car Restoration, Mini Tools e Animal Processing. Os nichos que mais explodem no YouTube hoje.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MODULES -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Nichos de Produção</div>
+      <h2 class="section-title">5 MÓDULOS<br>PRONTOS PRA USAR</h2>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card reveal">
+        <div class="module-emoji">💀</div>
+        <div class="module-info">
+          <h4>Skeleton Shorts</h4>
+          <p>Shorts virais de anatomia e limites do corpo humano. Roteiro + imagens + vídeo gerados em segundos.</p>
+          <span class="module-tag">Shorts · Alta Retenção</span>
+        </div>
+      </div>
+      <div class="module-card reveal">
+        <div class="module-emoji">🔨</div>
+        <div class="module-info">
+          <h4>Renovation Timelapse</h4>
+          <p>Transformações de ambientes do caos à perfeição. Trilha sonora inclusa para máximo impacto emocional.</p>
+          <span class="module-tag">Longa Duração · Viral</span>
+        </div>
+      </div>
+      <div class="module-card reveal">
+        <div class="module-emoji">🚗</div>
+        <div class="module-info">
+          <h4>Car Restoration</h4>
+          <p>Restauração de veículos clássicos com 15 cenas em JSON, SEO completo e thumbnail impactante.</p>
+          <span class="module-tag">1-2 Min · CPM Alto</span>
+        </div>
+      </div>
+      <div class="module-card reveal">
+        <div class="module-emoji">🛠️</div>
+        <div class="module-info">
+          <h4>Mini Ferramentas ASMR</h4>
+          <p>Ferramentas em miniatura ultra-realistas. Vídeos ASMR com altíssima taxa de visualização completa.</p>
+          <span class="module-tag">ASMR · Alta Retenção</span>
+        </div>
+      </div>
+      <div class="module-card reveal">
+        <div class="module-emoji">🐄</div>
+        <div class="module-info">
+          <h4>Animal Processing</h4>
+          <p>Documentário rural estilo viral shock. Um dos nichos com maior tempo de visualização do YouTube.</p>
+          <span class="module-tag">Viral Shock · Farm</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Como Funciona</div>
+      <h2 class="section-title">DO ZERO<br>AO VÍDEO</h2>
+      <p class="section-desc">4 passos simples. O programa faz o trabalho pesado por você.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h4>Gere sua Chave API do Google Gemini</h4>
+          <p>Acesse <a href="https://aistudio.google.com/" target="_blank">aistudio.google.com</a>, faça login com seu Gmail, clique em "Get API Key" e crie sua chave. É gratuito e leva menos de 1 minuto.</p>
+          <span class="step-badge free">100% Grátis</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h4>Acesse o VOX PRO Studio</h4>
+          <p>Abra o software, insira sua Chave de Licença (recebida por e-mail no Kiwify) e a API Key do Gemini. Clique em ENTRAR NO ESTÚDIO.</p>
+          <span class="step-badge">Licença Vitalícia</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h4>Escolha o Módulo e Inicie a Produção</h4>
+          <p>Selecione o nicho, coloque no modo AUTOMÁTICO, defina a quantidade (recomendado: 3-5 por lote) e clique em INICIAR PRODUÇÃO. A IA faz tudo.</p>
+          <span class="step-badge">IA Automática</span>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h4>Produza e Publique</h4>
+          <p>Use os arquivos gerados: imagens no Midjourney, vídeos no Luma/Runway/Kling, edição no CapCut. Agende e lucre com seus canais Dark.</p>
+          <span class="step-badge">Resultado Imediato</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MANUAL SECTION -->
+<section>
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-label">Manual Oficial</div>
+      <h2 class="section-title">TUDO QUE<br>VOCÊ PRECISA SABER</h2>
+      <p class="section-desc">Documentação completa incluída na sua compra. Confira um resumo abaixo:</p>
+    </div>
+    <div class="manual-wrap">
+      <div class="manual-intro reveal">
+        <h3>📖 Manual VOX PRO STUDIO — Guia Rápido</h3>
+        <p>Ao garantir seu acesso, você recebe o manual completo com todas as instruções. Abaixo, um preview do conteúdo que você vai dominar.</p>
+      </div>
+
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>⚙️</span>Passo 1 — Gerando seu "Combustível" (API Key do Gemini)</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>O VOX PRO Studio é o motor, mas ele precisa de combustível: a Inteligência Artificial do Google (Gemini 2.5 Flash). A melhor parte? <strong>É 100% gratuita.</strong></p>
+          <p style="margin-top:14px;"><strong>Como criar em menos de 1 minuto:</strong></p>
+          <ol style="margin-top:10px;">
+            <li>Acesse <a href="https://aistudio.google.com/" target="_blank">aistudio.google.com</a> e faça login com seu Gmail.</li>
+            <li>No menu lateral, clique em <strong>"Get API key"</strong>.</li>
+            <li>Clique em <strong>"Create API key"</strong> e selecione (ou crie) um projeto.</li>
+            <li>Copie o código gerado. Essa é sua Chave API — não compartilhe com ninguém.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>🚀</span>Passo 2 — Acessando o VOX PRO Studio</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>Após a compra no Kiwify, você recebe sua <strong>Chave de Licença por e-mail</strong>.</p>
+          <ol style="margin-top:12px;">
+            <li>Dê duplo clique no arquivo <strong>VOX_PRO_Studio.exe</strong> baixado.</li>
+            <li>Insira sua <strong>Chave de Licença</strong> (recebida por e-mail).</li>
+            <li>Cole sua <strong>API Key do Gemini</strong> no campo indicado.</li>
+            <li>Clique em <strong>ENTRAR NO ESTÚDIO</strong>.</li>
+          </ol>
+          <div class="warn-box">⚠️ Sua licença é vinculada ao seu computador. Não tente abrir em outras máquinas para evitar bloqueio por pirataria.</div>
+        </div>
+      </div>
+
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>🎬</span>Passo 3 — Como Produzir seus Vídeos</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>O VOX PRO Studio foi desenhado para ser à prova de qualquer nível de experiência:</p>
+          <ul style="margin-top:12px;">
+            <li><strong>Módulo de Produção:</strong> Escolha o nicho (Skeleton, Renovation, Car, etc.)</li>
+            <li><strong>Modo AUTOMÁTICO:</strong> A IA estuda o mercado, evita repetições e inventa os vídeos por você.</li>
+            <li><strong>Modo MANUAL:</strong> Você tem uma ideia? Cole na caixa e o VOX faz o resto.</li>
+            <li><strong>Quantidade:</strong> Recomendado gerar de 3 a 5 vídeos por ciclo.</li>
+          </ul>
+          <p style="margin-top:14px;">Os arquivos são salvos automaticamente em pastas organizadas com roteiros, prompts de imagem e prompts de vídeo separados.</p>
+        </div>
+      </div>
+
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>⚠️</span>Limites, Cotas e a "Tática Antibloqueio"</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>O Google Gemini tem limites de uso gratuito por minuto/dia. Se aparecer "Cota Atingida", <strong>não se preocupe — o software está funcionando normalmente.</strong></p>
+          <div class="tip-box">
+            <strong>✅ Tática Antibloqueio:</strong><br><br>
+            • Gere em <strong>lotes de 3 a 5 vídeos</strong> por vez.<br>
+            • Limite recomendado: <strong>15-20 vídeos por hora</strong> — suficiente para 3 canais por semana inteira.<br>
+            • Se esgotar o limite diário: crie uma nova API Key com outro Gmail. Você pode ter infinitas chaves!
+          </div>
+          <p style="margin-top:14px;">O sistema já tem trava de segurança embutida que espera 30 segundos automaticamente se o Google reclamar.</p>
+        </div>
+      </div>
+
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>🛠️</span>Passo 4 — Do Texto ao Vídeo Final</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>O VOX PRO entrega a "receita do bolo" perfeita. A execução final é simples:</p>
+          <ul style="margin-top:12px;">
+            <li>📸 Arquivo <strong>1_Prompt_Imagem.txt</strong> → Cole no <strong>Midjourney</strong> para gerar cenas hiper-realistas.</li>
+            <li>🎥 Imagem gerada + <strong>2_Prompt_Video.txt</strong> → Use no <strong>Luma Dream Machine, Runway Gen-3 ou Kling AI</strong>.</li>
+            <li>✂️ Junte tudo no <strong>CapCut</strong>, adicione uma música viral e agende no seu canal.</li>
+          </ul>
+          <div class="tip-box">💡 Dica: Você não precisa aparecer em câmera, ter experiência em edição ou conhecer o nicho. O VOX PRO cuida de tudo.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;margin-bottom:20px;">
+      <div class="section-label" style="justify-content:center;">Resultados Reais</div>
+      <h2 class="section-title">O QUE ESTÃO<br>DIZENDO</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Criei 3 canais em 2 semanas. O módulo Car Restoration já tá gerando views orgânico. Nunca pensei que fosse tão fácil produzir nesse nível."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div>
+            <div class="testi-name">Marcos A.</div>
+            <div class="testi-role">3 Canais Ativos</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Gero 20 vídeos em 1 hora. A IA nunca repete tema, cada vídeo é único. O Skeleton Shorts explodiu no primeiro mês com 4 vídeos virais."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div>
+            <div class="testi-name">Priscila F.</div>
+            <div class="testi-role">Canal com 50K inscritos</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Comprei com dúvida, mas o suporte ajudou na hora. Em 15 minutos já tava gerando meu primeiro vídeo. O ROI foi no primeiro mês."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">R</div>
+          <div>
+            <div class="testi-name">Rafael O.</div>
+            <div class="testi-role">Produtor Dark Content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;margin-bottom:20px;">
+      <div class="section-label" style="justify-content:center;">Oferta Especial</div>
+      <h2 class="section-title">GARANTA SEU<br>ACESSO AGORA</h2>
+    </div>
+    <div class="pricing-wrapper reveal">
+      <div class="pricing-card">
+        <div class="promo-ribbon">PROMO</div>
+        <div class="pricing-label">
+          <span></span>
+          Apenas 100 chaves nesse preço
+        </div>
+
+        <div class="pricing-original">De R$ 249,00</div>
+        <div class="pricing-promo">R$79,90</div>
+        <div class="pricing-period">pagamento único · acesso vitalício</div>
+
+        <div class="pricing-urgency">
+          🔥 <strong>Promoção de lançamento</strong> — preço sobe para R$249 após as 100 primeiras chaves
+        </div>
+
+        <div class="countdown">
+          <div class="cd-block"><div class="cd-num" id="cd-h">00</div><div class="cd-label">Horas</div></div>
+          <div class="cd-block"><div class="cd-num" id="cd-m">00</div><div class="cd-label">Min</div></div>
+          <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-label">Seg</div></div>
+        </div>
+
+        <div class="pricing-perks">
+          <div class="perk"><span class="perk-icon">✓</span><span>Software VOX PRO Studio (acesso vitalício)</span></div>
+          <div class="perk"><span class="perk-icon">✓</span><span>5 módulos dark: Skeleton, Renovation, Car, Mini Tools, Animal</span></div>
+          <div class="perk"><span class="perk-icon">✓</span><span>Modo automático com IA anti-repetição</span></div>
+          <div class="perk"><span class="perk-icon">✓</span><span>Manual completo + suporte técnico</span></div>
+          <div class="perk"><span class="perk-icon">✓</span><span>Compatível com Midjourney, Luma, Runway, Kling AI e CapCut</span></div>
+          <div class="perk"><span class="perk-icon">✓</span><span>Combustível gratuito via Google Gemini 2.5 Flash</span></div>
+        </div>
+
+        <!-- ▼▼▼ SUBSTITUA O # PELO LINK DA KIWIFY ▼▼▼ -->
+        <a href="#" class="btn-buy" target="_blank">
+          QUERO MEU ACESSO AGORA
+          <div class="btn-buy-sub">Compra 100% segura via Kiwify</div>
+        </a>
+        <!-- ▲▲▲ COLOQUE O LINK KIWIFY ACIMA ▲▲▲ -->
+
+        <div class="pricing-guarantee">
+          <span class="guarantee-icon">🛡️</span>
+          <span>Garantia de 7 dias. Se não gostar, devolvemos 100% do valor.</span>
+        </div>
+        <div class="pricing-note">Após a compra, você recebe sua licença por e-mail em até 5 minutos.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FAQ -->
+<section style="padding:80px 0;">
+  <div class="wrap">
+    <div class="reveal" style="text-align:center;margin-bottom:20px;">
+      <div class="section-label" style="justify-content:center;">Dúvidas Frequentes</div>
+      <h2 class="section-title" style="text-align:center;">FAQ</h2>
+    </div>
+    <div class="faq-wrap">
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>❓</span>Preciso ter experiência em vídeo ou edição?</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>Não. O VOX PRO Studio é desenhado para ser à prova de iniciantes. Ele gera tudo automaticamente: roteiros, prompts de imagem e de vídeo. Você só precisa copilar no CapCut com uma música.</p>
+        </div>
+      </div>
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>❓</span>Qual o custo do Gemini AI?</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>Zero. O Google oferece o Gemini 2.5 Flash gratuitamente para desenvolvedores. Você cria sua chave no Google AI Studio e usa sem pagar nada. Se atingir o limite, é só criar outra chave com um Gmail diferente.</p>
+        </div>
+      </div>
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>❓</span>Funciona em Mac ou apenas Windows?</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>A versão atual (.exe) é para Windows. Entre em contato com o suporte caso tenha dúvidas sobre compatibilidade.</p>
+        </div>
+      </div>
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>❓</span>Posso usar em mais de um computador?</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>A licença é vinculada a um computador para evitar pirataria. Se precisar trocar de máquina, entre em contato com o suporte para migrar a licença.</p>
+        </div>
+      </div>
+      <div class="accord reveal">
+        <button class="accord-head" onclick="toggleAccord(this)">
+          <h4><span>❓</span>Como recebo o software após a compra?</h4>
+          <div class="accord-arrow">▾</div>
+        </button>
+        <div class="accord-body">
+          <p>Imediatamente após a confirmação do pagamento no Kiwify, você recebe um e-mail com o link de download do software e sua Chave de Licença única.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FINAL CTA -->
+<section style="padding:100px 0;text-align:center;">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="hero-badge" style="justify-content:center;">
+        <span></span>
+        Últimas vagas nesse preço
+      </div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,8vw,96px);line-height:1;letter-spacing:2px;margin-bottom:20px;
+        background:linear-gradient(135deg,#FFD700,#FF8C00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        COMECE HOJE.<br>ESCALE AMANHÃ.
+      </h2>
+      <p style="color:var(--muted);font-size:16px;font-family:'Space Mono',monospace;max-width:520px;margin:0 auto 40px;line-height:1.7;">
+        Enquanto você lê isso, outros estão automatizando canais com o VOX PRO Studio. 
+        Não fique para trás.
+      </p>
+      <!-- ▼▼▼ SUBSTITUA O # PELO LINK DA KIWIFY ▼▼▼ -->
+      <a href="#" class="btn-buy" style="max-width:480px;margin:0 auto;display:block;" target="_blank">
+        QUERO MEU ACESSO POR R$79,90
+        <div class="btn-buy-sub">Oferta válida apenas para as 100 primeiras chaves</div>
+      </a>
+      <!-- ▲▲▲ COLOQUE O LINK KIWIFY ACIMA ▲▲▲ -->
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2025 VOX PRO STUDIO — Todos os direitos reservados.</p>
+    <p style="margin-top:8px;">Produto digital vendido via <a href="#">Kiwify</a> · Suporte: contato via e-mail após a compra</p>
+    <p style="margin-top:8px;font-size:10px;">Este produto não garante resultados financeiros específicos. Os resultados variam conforme o esforço e dedicação de cada usuário.</p>
+  </div>
+</footer>
+
+<!-- FLOATING CTA -->
+<div class="floating-cta">
+  <!-- ▼▼▼ SUBSTITUA O # PELO LINK DA KIWIFY ▼▼▼ -->
+  <a href="#pricing">🔥 Garantir R$79,90</a>
+  <!-- ▲▲▲ -->
+</div>
+
+<script>
+// ============ ACCORDION ============
+function toggleAccord(btn){
+  const body=btn.nextElementSibling;
+  const arrow=btn.querySelector('.accord-arrow');
+  const isOpen=body.classList.contains('open');
+  // close all
+  document.querySelectorAll('.accord-body.open').forEach(b=>{
+    b.classList.remove('open');
+    b.previousElementSibling.querySelector('.accord-arrow').style.transform='';
+  });
+  if(!isOpen){
+    body.classList.add('open');
+    arrow.style.transform='rotate(180deg)';
+  }
+}
+
+// ============ SCROLL REVEAL ============
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ============ COUNTDOWN (24h rolling) ============
+function updateCD(){
+  const now=new Date();
+  // reset each day at midnight
+  const target=new Date();
+  target.setHours(23,59,59,0);
+  let diff=Math.floor((target-now)/1000);
+  if(diff<0)diff=0;
+  const h=Math.floor(diff/3600);
+  const m=Math.floor((diff%3600)/60);
+  const s=diff%60;
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+updateCD();
+setInterval(updateCD,1000);
+</script>
+</body>
+</html>
