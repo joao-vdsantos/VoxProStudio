@@ -840,21 +840,17 @@ footer a:hover{color:var(--gold);}
           <span></span>
           Apenas 100 chaves nesse preço
         </div>
-
         <div class="pricing-original">De R$ 249,00</div>
         <div class="pricing-promo">R$79,90</div>
         <div class="pricing-period">pagamento único · acesso vitalício</div>
-
         <div class="pricing-urgency">
           🔥 <strong>Promoção de lançamento</strong> — preço sobe para R$249 após as 100 primeiras chaves
         </div>
-
         <div class="countdown">
           <div class="cd-block"><div class="cd-num" id="cd-h">00</div><div class="cd-label">Horas</div></div>
           <div class="cd-block"><div class="cd-num" id="cd-m">00</div><div class="cd-label">Min</div></div>
           <div class="cd-block"><div class="cd-num" id="cd-s">00</div><div class="cd-label">Seg</div></div>
         </div>
-
         <div class="pricing-perks">
           <div class="perk"><span class="perk-icon">✓</span><span>Software VOX PRO Studio (acesso vitalício)</span></div>
           <div class="perk"><span class="perk-icon">✓</span><span>5 módulos dark: Skeleton, Renovation, Car, Mini Tools, Animal</span></div>
@@ -863,14 +859,10 @@ footer a:hover{color:var(--gold);}
           <div class="perk"><span class="perk-icon">✓</span><span>Compatível com Midjourney, Luma, Runway, Kling AI e CapCut</span></div>
           <div class="perk"><span class="perk-icon">✓</span><span>Combustível gratuito via Google Gemini 2.5 Flash</span></div>
         </div>
-
-        <!-- ▼▼▼ SUBSTITUA O # PELO LINK DA KIWIFY ▼▼▼ -->
-        <a href="#" class="btn-buy" target="_blank">
+        <a href="https://pay.kiwify.com.br/LZ5UNaR" class="btn-buy" target="_blank">
           QUERO MEU ACESSO AGORA
           <div class="btn-buy-sub">Compra 100% segura via Kiwify</div>
         </a>
-        <!-- ▲▲▲ COLOQUE O LINK KIWIFY ACIMA ▲▲▲ -->
-
         <div class="pricing-guarantee">
           <span class="guarantee-icon">🛡️</span>
           <span>Garantia de 7 dias. Se não gostar, devolvemos 100% do valor.</span>
