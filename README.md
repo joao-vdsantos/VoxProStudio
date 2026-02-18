@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VOX PRO STUDIO — A Máquina de Produção de Canais Dark</title>
-<link rel="icon" type="image/png" href="">
+<link rel="icon" type="image/png" href="vox-icon.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -442,7 +442,7 @@ footer a:hover{color:var(--gold);}
 <nav>
   <div class="nav-inner">
     <div class="nav-brand">
-      <img src="" style="width:40px;height:40px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);object-fit:cover;" />
+      <img src="vox-icon.png" style="width:40px;height:40px;border-radius:10px;border:1px solid rgba(0,212,255,0.3);object-fit:cover;" />
       <span class="nav-brand-text">VOX PRO STUDIO</span>
     </div>
     <a href="#pricing" class="nav-cta">Garantir Acesso →</a>
@@ -453,7 +453,7 @@ footer a:hover{color:var(--gold);}
 <section class="hero">
   <div class="wrap">
     <div style="margin-bottom:32px;animation:fadeUp 0.5s ease both;">
-      <img src=""style="width:120px;height:120px;border-radius:24px;border:2px solid rgba(0,212,255,0.35);box-shadow:0 0 80px rgba(0,212,255,0.25),0 0 30px rgba(255,215,0,0.1);animation:logoPulse 3s ease-in-out infinite;" />
+      <img src="vox-icon.png"style="width:120px;height:120px;border-radius:24px;border:2px solid rgba(0,212,255,0.35);box-shadow:0 0 80px rgba(0,212,255,0.25),0 0 30px rgba(255,215,0,0.1);animation:logoPulse 3s ease-in-out infinite;" />
     </div>
     <div class="hero-badge">
       <span></span>
