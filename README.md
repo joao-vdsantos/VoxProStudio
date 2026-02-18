@@ -453,7 +453,7 @@ footer a:hover{color:var(--gold);}
 <section class="hero">
   <div class="wrap">
     <div style="margin-bottom:32px;animation:fadeUp 0.5s ease both;">
-      <img src="vox-icon.png"style="width:120px;height:120px;border-radius:24px;border:2px solid rgba(0,212,255,0.35);box-shadow:0 0 80px rgba(0,212,255,0.25),0 0 30px rgba(255,215,0,0.1);animation:logoPulse 3s ease-in-out infinite;" />
+      <img src="vox-icon.png" style="width:120px;height:120px;border-radius:24px;border:2px solid rgba(0,212,255,0.35);box-shadow:0 0 80px rgba(0,212,255,0.25),0 0 30px rgba(255,215,0,0.1);animation:logoPulse 3s ease-in-out infinite;">
     </div>
     <div class="hero-badge">
       <span></span>
